@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/popover";
 import { getProductList } from "@/app/functions/product";
 
-const frameworks = [
+let data = [
   {
     value: "next.js",
     label: "Next.js"
@@ -43,7 +43,16 @@ const frameworks = [
   }
 ];
 
-export function ComboboxDemo() {
+export function ComboboxDemo({
+  options,
+  change
+}: {
+  options: { value: string; label: string }[];
+  change: any;
+}) {
+  if (options) {
+    data = options;
+  }
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState("");
 
@@ -57,7 +66,7 @@ export function ComboboxDemo() {
           className="w-[200px] justify-between"
         >
           {value
-            ? frameworks.find((framework) => framework.value === value)?.label
+            ? data.find((framework) => framework.value === value)?.label
             : "Select framework..."}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
@@ -68,13 +77,14 @@ export function ComboboxDemo() {
           <CommandList>
             <CommandEmpty>No framework found.</CommandEmpty>
             <CommandGroup>
-              {frameworks.map((framework) => (
+              {data.map((framework) => (
                 <CommandItem
                   key={framework.value}
                   value={framework.value}
                   onSelect={(currentValue) => {
                     setValue(currentValue === value ? "" : currentValue);
                     setOpen(false);
+                    change(currentValue);
                   }}
                 >
                   <Check

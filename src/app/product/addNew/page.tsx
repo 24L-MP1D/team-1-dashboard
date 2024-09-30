@@ -4,10 +4,11 @@ import * as yup from "yup";
 import { useFormik, FormikErrors, Formik } from "formik";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Plus, X } from "lucide-react";
-import { relative } from "path";
+import { Edit, Plus, X } from "lucide-react";
+import { ComboboxDemo } from "@/components/collapse";
+import { getCategories } from "@/app/functions/category";
 
 interface size {
   name: string;
@@ -38,14 +39,14 @@ export default function Page() {
       { name: "L", amount: 0 },
       { name: "XL", amount: 0 },
       { name: "2XL", amount: 0 },
-      { name: "3XL", amount: 0 },
+      { name: "3XL", amount: 0 }
     ],
-    categoryId: "",
+    categoryId: ""
   };
 
   const formik = useFormik({
     initialValues,
-    onSubmit: () => {},
+    onSubmit: () => {}
   });
   return (
     <form className="grid grid-cols-2 gap-6 m-8" onSubmit={formik.handleSubmit}>
@@ -54,7 +55,9 @@ export default function Page() {
         <ImageInput formik={formik} />
         <RemainingAmount formik={formik} />
       </div>
-      <div></div>
+      <div>
+        <Category formik={formik} />
+      </div>
     </form>
   );
 }
@@ -203,6 +206,45 @@ const RemainingAmount = ({ formik }: { formik: any }) => {
           ))}
         </div>
       </div>
+    </div>
+  );
+};
+
+const Category = ({ formik }: { formik: any }) => {
+  const [data, setdata] = useState([]);
+  const [value, setValue] = useState("");
+  const getData = async () => {
+    setdata(await getCategories());
+  };
+  const handleChange = (newValue: string) => {
+    setValue(newValue);
+    formik.setFieldValue("categoryId", newValue);
+  };
+  useEffect(() => {
+    getData();
+  }, []);
+  console.log(formik.values);
+
+  return (
+    <div className="rounded-[12px] p-6 bg-white flex flex-col gap-2">
+      <span className="text-sm font-semibold">Ерөнхий ангилал</span>
+      <div className="flex gap-2">
+        <ComboboxDemo options={data} change={handleChange} />
+        <Button
+          onClick={() => {
+            setValue("");
+          }}
+        >
+          <Edit />
+        </Button>
+      </div>
+
+      <Input
+        id="categoryId"
+        value={value || formik.values.categoryId}
+        onChange={formik.handleChange}
+        disabled={value != ""}
+      />
     </div>
   );
 };
