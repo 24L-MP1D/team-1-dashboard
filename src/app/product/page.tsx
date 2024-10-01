@@ -14,9 +14,12 @@ function Page() {
 const Product = () => {
   return (
     <div className="p-6 justify-start flex flex-col gap-4">
-      <button className="flex items-center bg-[#121316] text-white rounded-[8px] py-3 px-4 max-w-[280px] justify-center">
+      <a
+        className="flex items-center bg-[#121316] text-white rounded-[8px] py-3 px-4 max-w-[280px] justify-center"
+        href="product/addNew"
+      >
         <Plus /> <span>Бүтээгдэхүүн нэмэх</span>
-      </button>
+      </a>
       <div className="mt-2 flex justify-between">
         <div className="flex gap-[13px]">
           <ComboboxDemo />

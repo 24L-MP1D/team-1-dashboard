@@ -18,13 +18,13 @@ export const RemainingAmount = ({ formik }: { formik: any }) => {
       <div className="flex flex-col gap-2">
         <span>Үлдэгдэл тоо ширхэг</span>
         <div className="grid grid-cols-3 gap-4">
-          {formik.values.sizes.map(({ name, amount }: size, index: number) => (
+          {formik.values.sizes.map(({ Name, qty }: size, index: number) => (
             <div key={`amountInput_${index}`}>
-              <span className="text-sm">{name}:</span>
+              <span className="text-sm">{Name}:</span>
               <Input
                 type="number"
-                id={`sizes[${index}]` + ".amount"}
-                value={amount}
+                id={`sizes[${index}]` + ".qty"}
+                value={qty}
                 onChange={formik.handleChange}
               />
             </div>

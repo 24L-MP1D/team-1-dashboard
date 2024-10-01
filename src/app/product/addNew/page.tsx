@@ -12,10 +12,11 @@ import { Sale } from "./sale";
 import { RemainingAmount } from "./remainingAmout";
 import { Category } from "./category";
 import { Coupon } from "./coupon";
+import { Link, MoveLeft } from "lucide-react";
 
 export interface size {
-  name: string;
-  amount: number;
+  Name: string;
+  qty: number;
 }
 
 export interface FormValues {
@@ -40,17 +41,17 @@ export default function Page() {
     productImageFiles: [],
     price: 0,
     sizes: [
-      { name: "Free", amount: 0 },
-      { name: "S", amount: 0 },
-      { name: "M", amount: 0 },
-      { name: "L", amount: 0 },
-      { name: "XL", amount: 0 },
-      { name: "2XL", amount: 0 },
-      { name: "3XL", amount: 0 },
+      { Name: "Free", qty: 0 },
+      { Name: "S", qty: 0 },
+      { Name: "M", qty: 0 },
+      { Name: "L", qty: 0 },
+      { Name: "XL", qty: 0 },
+      { Name: "2XL", qty: 0 },
+      { Name: "3XL", qty: 0 }
     ],
     categoryId: "",
     sale: 0,
-    coupon: "",
+    coupon: ""
   };
 
   const validationSchema = yup.object({
@@ -59,7 +60,7 @@ export default function Page() {
     productCode: yup.string().required("product code required"),
     productImageFiles: yup.array().min(1),
     price: yup.number().min(100),
-    categoryId: yup.string().required("category required"),
+    categoryId: yup.string().required("category required")
   });
 
   const [loading, setLoading] = useState(false);
@@ -74,11 +75,12 @@ export default function Page() {
       if (formik.values.coupon == "") {
         await formik.setFieldValue("coupon", null);
       }
+
       await createProduct(formik.values);
 
       setLoading(false);
     },
-    validationSchema,
+    validationSchema
   });
 
   console.log(formik.values);
@@ -88,24 +90,39 @@ export default function Page() {
   }
 
   return (
-    <form className="grid grid-cols-2 gap-6 m-8" onSubmit={formik.handleSubmit}>
-      <div className="flex flex-col gap-6">
-        <ProductInfoInput formik={formik} />
-        <ImageInput formik={formik} />
-        <Category formik={formik} />
-      </div>
-      <div className="flex flex-col gap-6">
-        <Sale formik={formik} />
-        <Coupon formik={formik} />
-        <RemainingAmount formik={formik} />
-
-        <div className="flex flex-row-reverse gap-2">
-          <Button type="submit" className="bg-green-600 text-white">
-            Submit
-          </Button>
-          <Button type="reset">Clear</Button>
+    <div className="flex gap-6">
+      <div>
+        <div className=" bg-white p-2">
+          <a className="flex gap-4 items-center p-4" href="/product">
+            <MoveLeft size={25} />
+            <span>Бүтээгдэхүүн нэмэх</span>
+          </a>
         </div>
+        <form
+          className="grid grid-cols-2 gap-6 m-8"
+          onSubmit={formik.handleSubmit}
+        >
+          <div className="flex flex-col gap-6">
+            <ProductInfoInput formik={formik} />
+            <ImageInput formik={formik} />
+            <Category formik={formik} />
+          </div>
+          <div className="flex flex-col gap-6">
+            <Sale formik={formik} />
+            <Coupon formik={formik} />
+            <RemainingAmount formik={formik} />
+
+            <div className="flex flex-row-reverse gap-2">
+              <Button type="submit" className="bg-green-600 text-white">
+                Submit
+              </Button>
+              <Button type="reset" onClick={formik.handleReset}>
+                Clear
+              </Button>
+            </div>
+          </div>
+        </form>
       </div>
-    </form>
+    </div>
   );
 }
