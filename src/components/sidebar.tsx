@@ -48,20 +48,22 @@ export const SideBar = () => {
   const pathName = usePathname();
 
   return (
-    <div className="flex flex-col gap-4 max-w-[222px] bg-white w-full min-h-[100vh] h-full pt-6">
-      {sidebar.map(({ label, id, Icon }: Panel) => (
-        <div
-          className={`flex px-4 gap-4 text-[#121316] py-[22px] items-center ${
-            pathName.includes(id) && `bg-slate-200`
-          }`}
-          onClick={() => {
-            router.push(id);
-          }}
-        >
-          <Icon />
-          <span>{label}</span>
-        </div>
-      ))}
+    <div className="max-w-[222px] w-full h-100%  relative">
+      <div className="fixed flex flex-col gap-4 pt-6  bg-white h-[100vh]">
+        {sidebar.map(({ label, id, Icon }: Panel) => (
+          <div
+            className={`flex px-4 gap-4 text-[#121316] py-[22px] items-center ${
+              pathName.includes(id) && `bg-slate-200`
+            }`}
+            onClick={() => {
+              router.push(id);
+            }}
+          >
+            <Icon />
+            <span>{label}</span>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

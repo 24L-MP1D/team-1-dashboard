@@ -5,7 +5,7 @@ import { Plus, Search } from "lucide-react";
 
 function Page() {
   return (
-    <div className="">
+    <div className="flex-1">
       <Product />
     </div>
   );

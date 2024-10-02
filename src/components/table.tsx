@@ -25,7 +25,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -42,7 +41,7 @@ export type Payment = {
   categoryId: string;
   price: number;
   storage: number;
-  sizes: [{}];
+  sizes: { Name: string; qty: number }[];
   sold: number;
   createdDate: Date;
 };
@@ -71,49 +70,51 @@ export const columns: ColumnDef<Payment>[] = [
     enableHiding: false
   },
   {
-    accessorKey: "status",
-    header: "asjldhflaksjdfhal",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("status")}</div>
-    )
+    accessorKey: "combinedData",
+    header: "Бүтээгдэхүүн",
+    cell: ({ row }) => {
+      const { images, productName, _id } = row.original;
+      return (
+        <div className="flex gap-3">
+          <img src={images[0] || ""} className="size-10 rounded-full" />
+          <div className="flex flex-col gap-1">
+            <span className="text-[#121316] text-sm font-semibold">
+              {productName}
+            </span>
+            <span className="text-[#5E6166] text-[12px]">{_id}</span>
+          </div>
+        </div>
+      );
+    }
   },
   {
     accessorKey: "categoryId",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          categoryId
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-    cell: ({ row }) => (
-      <div className="lowercase">{row.getValue("categoryId")}</div>
-    )
+    header: ({ column }) => (
+      <Button
+        variant="ghost"
+        className="p-0"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+      >
+        Category
+        <ArrowUpDown className="ml-2 h-4 w-4" />
+      </Button>
+    ),
+    cell: ({ row }) => <div className="">{row.getValue("categoryId")}</div>
   },
   {
     accessorKey: "price",
     header: "Price",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("price")}₮</div>
-    )
+    cell: ({ row }) => <div className="">{row.getValue("price")}₮</div>
   },
-
   {
     accessorKey: "sizes",
-    header: () => <div className="text-right">Amount</div>,
+    header: () => <div className="">Amount</div>,
     cell: ({ row }) => {
-      const sizes = row.getValue<[{ Name: string; qty: number }]>("sizes");
-
-      // Format the amount as a dollar amount
-
+      const sizes = row.getValue<{ Name: string; qty: number }[]>("sizes");
       return (
-        <div className="text-right font-medium flex flex-col">
-          {sizes.map((size) => (
-            <span>
+        <div className=" font-medium flex flex-col">
+          {sizes.map((size, index) => (
+            <span key={index}>
               {size.Name} : {size.qty}
             </span>
           ))}
@@ -130,7 +131,6 @@ export const columns: ColumnDef<Payment>[] = [
   },
   {
     id: "actions",
-    enableHiding: false,
     cell: ({ row }) => {
       const payment = row.original;
 
@@ -160,14 +160,16 @@ export const columns: ColumnDef<Payment>[] = [
 ];
 
 export function DataTableDemo() {
-  const [data, setData] = React.useState([]);
+  const [data, setData] = React.useState<Payment[]>([]);
+
   const getData = async () => {
-    setData(await getProductList());
+    const productList = await getProductList();
+    setData(productList);
   };
+
   React.useEffect(() => {
     getData();
   }, []);
-  console.log(data);
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -209,20 +211,16 @@ export function DataTableDemo() {
             {table
               .getAllColumns()
               .filter((column) => column.getCanHide())
-              .map((column) => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
-                  >
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
-                );
-              })}
+              .map((column) => (
+                <DropdownMenuCheckboxItem
+                  key={column.id}
+                  className="capitalize"
+                  checked={column.getIsVisible()}
+                  onCheckedChange={(value) => column.toggleVisibility(!!value)}
+                >
+                  {column.id}
+                </DropdownMenuCheckboxItem>
+              ))}
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
@@ -231,23 +229,21 @@ export function DataTableDemo() {
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  );
-                })}
+                {headerGroup.headers.map((header) => (
+                  <TableHead key={header.id}>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                  </TableHead>
+                ))}
               </TableRow>
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
+            {table.getRowModel().rows.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
