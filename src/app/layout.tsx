@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { SideBar } from "@/components/sidebar";
+import LoginWrapper from "./context/LoginWrapper";
+
+const jwt = require("jsonwebtoken");
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -29,10 +32,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <div className="flex gap-6">
-          <SideBar />
-          {children}
-        </div>
+        <LoginWrapper>{children}</LoginWrapper>
       </body>
     </html>
   );

@@ -43,14 +43,15 @@ const sidebar: Panel[] = [
 ];
 
 export const SideBar = () => {
-  const pathName = usePathname();
   const router = useRouter();
-  console.log(pathName);
+
+  const pathName = usePathname();
+
   return (
     <div className="flex flex-col gap-4 max-w-[222px] bg-white w-full min-h-[100vh] h-full pt-6">
       {sidebar.map(({ label, id, Icon }: Panel) => (
         <div
-          className={`flex px-4 py-1 gap-4 text-[#121316] py-[22px] items-center ${
+          className={`flex px-4 gap-4 text-[#121316] py-[22px] items-center ${
             pathName.includes(id) && `bg-slate-200`
           }`}
           onClick={() => {

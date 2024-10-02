@@ -33,7 +33,7 @@ export default function Home() {
     validationSchema
   });
   return (
-    <div className="">
+    <div className=" m-auto">
       <form
         className="max-w-[440px] w-full m-auto mt-[14px] flex flex-col items-center rounded-l border-[1px] border-[#ECEDF0] p-10 gap-6"
         onSubmit={formik.handleSubmit}

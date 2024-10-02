@@ -1,12 +1,6 @@
+"use client";
 import * as React from "react";
-import {
-  Formik,
-  FormikHelpers,
-  FormikProps,
-  Form,
-  Field,
-  FieldProps
-} from "formik";
+import { useRouter } from "next/navigation";
 
 interface MyFormValues {
   firstName: string;
@@ -14,5 +8,6 @@ interface MyFormValues {
 
 export default function Home() {
   const initialValues: MyFormValues = { firstName: "" };
-  return <div></div>;
+  const router = useRouter();
+  router.push("./dashboard");
 }
