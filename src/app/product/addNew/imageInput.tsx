@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 export const ImageInput = ({ formik }: { formik: any }) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [images, setImages] = useState<File[]>([]);
+  console.log(images);
 
   const handleClick = () => {
     fileInputRef.current?.click();
@@ -12,16 +13,21 @@ export const ImageInput = ({ formik }: { formik: any }) => {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files) {
-      setImages([...images, ...Array.from(files)]);
-      formik.setFieldValue("productImageFiles", [
-        ...images,
-        ...Array.from(files),
-      ]);
+      const newFiles = Array.from(files);
+      setImages((prevImages) => {
+        const updatedImages = [...prevImages, ...newFiles];
+        formik.setFieldValue("productImageFiles", updatedImages);
+        return updatedImages;
+      });
     }
   };
 
   const deleteImage = (img: File) => {
-    setImages(images.filter((image) => image != img));
+    setImages((prevImages) => {
+      const updatedImages = prevImages.filter((image) => image !== img);
+      formik.setFieldValue("productImageFiles", updatedImages);
+      return updatedImages;
+    });
   };
 
   return (

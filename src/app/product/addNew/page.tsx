@@ -13,7 +13,6 @@ import { RemainingAmount } from "./remainingAmout";
 import { Category } from "./category";
 import { Coupon } from "./coupon";
 import { Link, MoveLeft } from "lucide-react";
-import { SideBar } from "@/components/sidebar";
 
 export interface size {
   Name: string;
@@ -70,18 +69,33 @@ export default function Page() {
     initialValues,
     onSubmit: async () => {
       setLoading(true);
-      console.log(formik.values);
+
+      // Log initial values
+      console.log("Initial values:", formik.values);
+
+      // Ensure all image uploads are completed
       const urls = await uplaodImage(formik.values.productImageFiles);
+
+      // Update Formik state with the new URLs
       await formik.setFieldValue("images", urls);
-      if (formik.values.coupon == "") {
+
+      // Check if coupon is empty and set to null
+      if (formik.values.coupon === "") {
         await formik.setFieldValue("coupon", null);
       }
 
-      await createProduct(formik.values);
+      // Get the updated images after setting the new value
+      const updatedImages = formik.values.images; // This might still show old value
+      console.log("Updated images before createProduct:", updatedImages);
+
+      // Create the product with updated Formik values
+      await createProduct({
+        ...formik.values,
+        images: urls // Directly use the new URLs here
+      });
 
       setLoading(false);
-    },
-    validationSchema
+    }
   });
 
   console.log(formik.values);
