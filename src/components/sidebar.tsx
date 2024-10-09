@@ -22,7 +22,7 @@ const sidebar: Panel[] = [
   },
   {
     label: "Орлого",
-    id: "/income", // Ensure leading slash
+    id: "/Income", // Ensure leading slash
     Icon: Tag
   },
   {

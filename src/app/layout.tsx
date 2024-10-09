@@ -32,8 +32,6 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-custom-gray`}
       >
-        <div className=""></div>
-        {children}
         <LoginWrapper>{children}</LoginWrapper>
       </body>
     </html>

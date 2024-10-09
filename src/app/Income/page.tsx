@@ -11,15 +11,16 @@ import {
   TableBody,
   TableHead,
   TableRow,
-  TableCell,
+  TableCell
 } from "@/components/ui/table";
 import {
   Popover,
   PopoverTrigger,
-  PopoverContent,
+  PopoverContent
 } from "@/components/ui/popover";
 import * as XLSX from "xlsx";
 import jsPDF from "jspdf";
+import { backcode } from "../functions/login";
 
 interface IIncome {
   _id: string;
@@ -45,12 +46,12 @@ const Income = () => {
         const token = localStorage.getItem("authToken");
         const headers: HeadersInit = {
           "Content-Type": "application/json",
-          ...(token ? { authtoken: token } : {}),
+          ...(token ? { authtoken: token } : {})
         };
 
-        const response = await fetch("http://localhost:5001/income", {
+        const response = await fetch(`${backcode}/income`, {
           method: "GET",
-          headers,
+          headers
         });
 
         if (!response.ok) {
@@ -60,7 +61,7 @@ const Income = () => {
         const data: IIncome[] = await response.json();
         const formattedData = data.map((item) => ({
           ...item,
-          deliveryDate: new Date(item.deliveryDate),
+          deliveryDate: new Date(item.deliveryDate)
         }));
 
         setIncomeData(formattedData);
@@ -122,7 +123,7 @@ const Income = () => {
         "Захиалгын ID": data._id,
         Захиалагч: data.userId,
         Төлбөр: data.amountPaid,
-        Огноо: data.deliveryDate.toLocaleDateString(),
+        Огноо: data.deliveryDate.toLocaleDateString()
       }))
     );
 

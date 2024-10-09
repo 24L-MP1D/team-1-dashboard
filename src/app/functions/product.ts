@@ -4,11 +4,13 @@ import { headers } from "next/headers";
 import { backcode } from "./login";
 import { FormValues } from "../product/addNew/page";
 
-export const getProductList = async () => {
+export const getProductList = async (query: any) => {
+  console.log(query);
   try {
     const res = await fetch(`${backcode}/product/list`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(query)
     });
     const data = await res.json();
     return data;
@@ -24,7 +26,7 @@ export const createProduct = async (data: FormValues) => {
     const res = await fetch(`${backcode}/product/create`, {
       method: "POST",
       headers: { "Content-Type": "application/json", authtoken: token },
-      body: JSON.stringify(data),
+      body: JSON.stringify(data)
     });
     if (res.ok) {
       return true;

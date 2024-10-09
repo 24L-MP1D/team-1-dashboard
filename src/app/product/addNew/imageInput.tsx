@@ -4,8 +4,6 @@ import { useRef, useState } from "react";
 export const ImageInput = ({ formik }: { formik: any }) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [images, setImages] = useState<File[]>([]);
-  console.log(images);
-
   const handleClick = () => {
     fileInputRef.current?.click();
   };
