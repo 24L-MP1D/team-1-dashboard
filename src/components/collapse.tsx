@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { Check, ChevronDown } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -11,41 +11,41 @@ import {
   CommandGroup,
   CommandInput,
   CommandItem,
-  CommandList
+  CommandList,
 } from "@/components/ui/command";
 import {
   Popover,
   PopoverContent,
-  PopoverTrigger
+  PopoverTrigger,
 } from "@/components/ui/popover";
 import { getProductList } from "@/app/functions/product";
 
 let data = [
   {
     value: "next.js",
-    label: "Next.js"
+    label: "Next.js",
   },
   {
     value: "sveltekit",
-    label: "SvelteKit"
+    label: "SvelteKit",
   },
   {
     value: "nuxt.js",
-    label: "Nuxt.js"
+    label: "Nuxt.js",
   },
   {
     value: "remix",
-    label: "Remix"
+    label: "Remix",
   },
   {
     value: "astro",
-    label: "Astro"
-  }
+    label: "Astro",
+  },
 ];
 
 export function ComboboxDemo({
   options,
-  change
+  change,
 }: {
   options: { value: string; label: string }[];
   change: any;
@@ -68,7 +68,7 @@ export function ComboboxDemo({
           {value
             ? data.find((framework) => framework.value === value)?.label
             : "Select framework..."}
-          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0">
