@@ -15,7 +15,7 @@ export default function LoginWrapper({ children }: { children: any }) {
     const token = localStorage.getItem("authToken");
     if (!token) {
       setLog(false);
-      router.push("/login");
+      return router.push("/login");
     } else {
       const decoded = jwtDecode(token);
       const d = new Date(0);
@@ -24,7 +24,7 @@ export default function LoginWrapper({ children }: { children: any }) {
         setLog(true);
       } else {
         setLog(false);
-        router.push("login");
+        return router.push("/login");
       }
     }
   }, []);

@@ -159,17 +159,17 @@ export const columns: ColumnDef<Payment>[] = [
   }
 ];
 
-export function DataTableDemo() {
+export function DataTableDemo({ query }: { query: any }) {
   const [data, setData] = React.useState<Payment[]>([]);
 
   const getData = async () => {
-    const productList = await getProductList();
+    const productList = await getProductList(query);
     setData(productList);
   };
 
   React.useEffect(() => {
     getData();
-  }, []);
+  }, [query]);
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
